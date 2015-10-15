@@ -33,6 +33,7 @@ public class Handler : MonoBehaviour
 	public GameObject goal;
 	public GameObject canvas;
 	public GameObject pauseBtn;
+	public GameObject ExitPanel;
 	public AudioClip SE_clear;
 	public AudioClip SE_gameover;
 	public AudioClip SE_click;
@@ -114,10 +115,17 @@ public class Handler : MonoBehaviour
 	void Update ()
 	{
 		//게임종료
-		if (Input.GetKeyDown (KeyCode.Escape)) {	
-			PlayerPrefs.SetInt ("numLight", Data.numLimit);
-			PlayerPrefs.Save ();
-			Application.Quit ();
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			if(!ExitPanel.activeSelf)
+			{
+				ExitPanel.SetActive(true);
+				Time.timeScale = 0;			
+			}
+			else
+			{
+				ExitPanel.SetActive(false);
+				Time.timeScale = 1;
+			}
 		}
 
 
@@ -381,6 +389,7 @@ public class Handler : MonoBehaviour
 	{
 		Time.timeScale = 1;
 		pauseImg.SetActive (false);
+		ExitPanel.SetActive (false);
 		AudioSource.PlayClipAtPoint(SE_click,canvas.transform.position);
 	}
 	public void showCredit()
@@ -394,7 +403,12 @@ public class Handler : MonoBehaviour
 			isCreditOn = false;
 		}
 	}
-
+	public void ExitGame()
+	{
+		PlayerPrefs.SetInt ("numLight", Data.numLimit);
+		PlayerPrefs.Save ();
+		Application.Quit ();
+	}
 	public void playSE(AudioClip aud)
 	{
 		AudioSource.PlayClipAtPoint(aud,transform.position);
